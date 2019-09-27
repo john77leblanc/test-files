@@ -43,8 +43,8 @@ const meowCat = name => {
 
 let pet = meowCat('Kevin');
 
-console.log(pet.methods.run());
-console.log(pet.methods.talk());
-console.log(pet.methods.get('data'));
+console.log(pet.methods.run()); // Kevin the Cat can run
+console.log(pet.methods.talk()); // Meow
+console.log(pet.methods.get('data')); // Hello
 pet.methods.set('data','goodbye');
-console.log(pet.methods.get('data'));
+console.log(pet.methods.get('data')); // Goodbye
