@@ -1,6 +1,6 @@
-const cat = name => ({
+const mammal = (name, type) => ({
     name,
-    type: 'Cat',
+    type,
     run: true
 })
 
@@ -17,34 +17,29 @@ const getData = priv => ({
 })
 
 const setData = priv => ({
-    set: (data, value) => priv[data] = value
-})
-
-const meowCat = name => {
-    let priv = {
-        data: "Hello"
+    set: (data, value) => {
+        priv[data] = value;
+        return this.methods;
     }
+});
 
+const animal = (name, type) => {
     this.state = {
-        __proto__ : cat(name),
+        __proto__ : mammal(name, type),
         sound : 'Meow',
     }
 
-    this.methods = Object.assign(
+    return this.methods = Object.assign(
         {},
         runner(this.state),
         talker(this.state),
-        getData(priv),
-        setData(priv)
+        getData(this.state),
+        setData(this.state)
     );
-
-    return this;
 }
 
-let pet = meowCat('Kevin');
+let pet = animal('Kevin', 'cat');
 
-console.log(pet.methods.run()); // Kevin the Cat can run
-console.log(pet.methods.talk()); // Meow
-console.log(pet.methods.get('data')); // Hello
-pet.methods.set('data','goodbye');
-console.log(pet.methods.get('data')); // Goodbye
+console.log(pet.run()); // Kevin the Cat can run
+console.log(pet.talk()); // Meow
+console.log(pet.set('sound','Woof').talk()); // Woof
