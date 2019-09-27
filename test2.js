@@ -4,19 +4,13 @@ const mammal = (name, type) => ({
     run: true
 })
 
-const runner = state => ({
+const behaviours = state => ({
+    talk: () => state.sound,
     run: () => `${state.name} the ${state.type} can ${state.run ? 'run' : 'not run'}.`
-});
-
-const talker = state => ({
-    talk: () => state.sound
 })
 
-const getData = state => ({
-    get: data => state[data]
-})
-
-const setData = state => ({
+const dataGetSet = state => ({
+    get: data => state[data],
     set: (data, value) => {
         state[data] = value;
         return this.methods;
@@ -31,10 +25,8 @@ const animal = (name, type) => {
 
     return this.methods = Object.assign(
         {},
-        runner(this.state),
-        talker(this.state),
-        getData(this.state),
-        setData(this.state)
+        dataGetSet(this.state),
+        behaviours(this.state)
     );
 }
 
