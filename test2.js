@@ -12,13 +12,13 @@ const talker = state => ({
     talk: () => state.sound
 })
 
-const getData = priv => ({
-    get: data => priv[data]
+const getData = state => ({
+    get: data => state[data]
 })
 
-const setData = priv => ({
+const setData = state => ({
     set: (data, value) => {
-        priv[data] = value;
+        state[data] = value;
         return this.methods;
     }
 });
