@@ -1,13 +1,24 @@
+//-------------------------------
+//  Inheritance
+//-------------------------------
+
 const mammal = (name, type) => ({
     name,
     type,
     run: true
 })
 
-const behaviours = state => ({
+//-------------------------------
+//  Composed functions
+//-------------------------------
+
+const behaviours = (state) => ({
     talk: () => state.sound,
-    run: () => `${state.name} the ${state.type} can ${state.run ? 'run' : 'not run'}.`
-})
+    run: () => `${state.name} the ${state.type} can ${state.run ? 'run' : 'not run'}.`,
+    talkThenRun: function (state) {
+        return `${this.talk()}, ${this.run()}`
+    }
+});
 
 const dataGetSet = state => ({
     get: data => state[data],
@@ -17,9 +28,14 @@ const dataGetSet = state => ({
     }
 });
 
-const animal = (name, type) => {
+//-------------------------------
+//  Animal Object
+//  + By returning this.methods, this.state acts as private data
+//-------------------------------
+
+const cat = (name) => {
     this.state = {
-        __proto__ : mammal(name, type),
+        __proto__ : mammal(name, 'cat'),
         sound : 'Meow',
     }
 
@@ -30,8 +46,8 @@ const animal = (name, type) => {
     );
 }
 
-let pet = animal('Kevin', 'cat');
+let pet = cat('Kevin');
 
 console.log(pet.run()); // Kevin the Cat can run
 console.log(pet.talk()); // Meow
-console.log(pet.set('sound','Woof').talk()); // Woof
+console.log(pet.set('sound','Woof').talkThenRun()); // Woof
