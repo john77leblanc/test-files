@@ -22,8 +22,8 @@ const behaviours = (state) => ({
 
 const dataGetSet = state => ({
     get: data => state[data],
-    set: (data, value) => {
-        state[data] = value;
+    set: (data) => {
+        Object.assign(state,data);
         return this.methods;
     }
 });
@@ -50,4 +50,10 @@ let pet = cat('Kevin');
 
 console.log(pet.run()); // Kevin the Cat can run
 console.log(pet.talk()); // Meow
-console.log(pet.set('sound','Woof').talkThenRun()); // Woof
+
+let newData = {
+    sound: 'Woof',
+    type: 'dog'
+};
+
+console.log(pet.set(newData).talkThenRun()); // Woof, Kevin the dog can run
