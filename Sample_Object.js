@@ -47,6 +47,27 @@ const simple = () => {
 
 console.log(simple().buildHTML());
 
+// Output
+//  <div>
+//    <h1>Title: Hello World</h1>
+//    <div>
+//      <p>List 1:</p>
+//      <ul>
+//        <li>1</li>
+//        <li>2</li>
+//        <li>3</li>
+//      </ul>
+//    </div>
+//    <div>
+//      <p>List 2:</p>
+//      <ul>
+//        <li>4</li>
+//        <li>5</li>
+//        <li>6</li>
+//      </ul>
+//    </div>
+//  </div>
+
 //----------------------------------
 //  Complex
 //----------------------------------
