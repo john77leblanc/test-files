@@ -22,7 +22,7 @@ const behaviours = (state) => ({
 
 const dataGetSet = state => ({
     get: data => state[data],
-    set: (data) => {
+    set: data => {
         Object.assign(state,data);
         return this.methods;
     }
@@ -39,21 +39,33 @@ const cat = (name) => {
         sound : 'Meow',
     }
 
-    return this.methods = Object.assign(
-        {},
-        dataGetSet(this.state),
-        behaviours(this.state)
-    );
+    this.privateMethods = ({
+        getData: () => this.state.sound
+    });
+
+    // return this.methods = Object.assign(
+    //     {},
+    //     dataGetSet(this.state),
+    //     behaviours(this.state)
+    // );
+
+    return this.methods =
+        ({
+            blah: () => this.privateMethods.getData()
+        })
+    ;
 }
 
 let pet = cat('Kevin');
 
-console.log(pet.run()); // Kevin the Cat can run
-console.log(pet.talk()); // Meow
+console.log(pet.blah());
 
-let newData = {
-    sound: 'Woof',
-    type: 'dog'
-};
+// console.log(pet.run()); // Kevin the Cat can run
+// console.log(pet.talk()); // Meow
 
-console.log(pet.set(newData).talkThenRun()); // Woof, Kevin the dog can run
+// let newData = {
+//     sound: 'Woof',
+//     type: 'dog'
+// };
+
+// console.log(pet.set(newData).talkThenRun()); // Woof, Kevin the dog can run
