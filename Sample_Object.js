@@ -1,3 +1,56 @@
+//----------------------------------
+//  Simplified
+//----------------------------------
+
+const simple = () => {
+  // Private Data
+  this.state = ({
+    title: "Hello World",
+    lists: [
+      {
+        id: 1,
+        list: [1,2,3]
+      },
+      {
+        id: 2,
+        list: [4,5,6]
+      }
+    ]
+  });
+
+  // HTML templates
+  this.templates = ({
+    holder: () => {
+      return `
+        <div>
+          <h1>Title: ${this.state.title}</h1>
+          ${this.state.lists.reduce((sum, list) => sum + this.templates.listHolder(list),"")}
+        </di>
+      `;
+    },
+    listHolder: list => {
+      return `
+        <div>
+          <p>List ${list.id}</p>
+          <ul>${this.templates.listItems(list.list)}</ul>
+        </div>
+      `;
+    },
+    listItems: list => list.reduce((sum, item) => sum + `<li>${item}</li>\n`,"")
+  });
+
+  // Public Methods
+  return this.methods = ({
+    buildHTML: () => this.templates.holder()
+  });
+}
+
+console.log(simple().buildHTML());
+
+//----------------------------------
+//  Complex
+//----------------------------------
+
 // Inherited Values
 const character = data => Object.assign(
   {
@@ -33,7 +86,6 @@ const actions = state => ({
 const dnd = data => {
 
   // Private object data
-
   this.state = {
     __proto__: character(data)
   };
@@ -93,7 +145,7 @@ let data = {
   name: "John",
   age: 25,
   gender: "Male",
-  sound: "Hello",
+  sound: "Hello", 
   type: "Human",
   strengths: [
     "html",
