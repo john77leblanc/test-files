@@ -45,7 +45,7 @@ const simple = () => {
   });
 }
 
-console.log(simple().buildHTML());
+// console.log(simple().buildHTML());
 
 // Output
 //  <div>
@@ -95,7 +95,7 @@ const getSet = state => ({
 const actions = state => ({
   talk: () => state.sound,
   run: () => `${state.name} the ${state.type} can ${state.run ? 'run' : 'not run'}.`,
-  talkThenRun: function(state) {
+  talkThenRun: function() {
     return `${this.talk()}, ${this.run()}`;
   }
 });
@@ -106,6 +106,12 @@ const actions = state => ({
 //----------------------------------
 const dnd = data => {
 
+  // Target for HTML output
+  this.target = document.getElementById("app");
+
+  // Update DOM
+  this.update = (target, value) => document.getElementById(target).innerHTML = value;
+
   // Private object data
   this.state = {
     __proto__: character(data)
@@ -113,7 +119,7 @@ const dnd = data => {
 
   // Static values that do not get changed
   this.static = ({
-    target: "NAV"
+    key: "value"
   });
 
   // Accepts a value and returns a modified value
@@ -124,7 +130,10 @@ const dnd = data => {
 
   // Methods that can only be called inside of the object
   this.privateMethods = ({
-    reverseList: l => l = l.reverse()
+    reverseList: (l, target = false) => {
+      l = l.reverse();
+      if (target) this.update(target);
+    }
   });
 
   // Methods to be called publicly
@@ -133,24 +142,54 @@ const dnd = data => {
       this.privateMethods.reverseList(this.state.strengths);
       this.privateMethods.reverseList(this.state.weaknesses);
     },
-    buildHTML: () => this.templates.mainBox()
+    buildHTML: () => this.target.innerHTML = this.templates.mainBox(),
+    sample: () => this.target.appendChild(this.templates.sampleBox())
   });
 
+  this.new = e => document.createElement(e);
+
   this.templates = ({
+    sampleBox: () => {
+      let box = document.createElement("div");
+      box.appendChild(this.templates.element("h1", this.state.name));
+      box.appendChild(this.templates.ul(this.state.strengths));
+      box.appendChild(this.templates.button({name: "Hello", method: () => alert("Hello")}));
+      return box;
+    },
     mainBox: () => {
       return `
         <div>
           <p>Name: ${this.state.name}</p>
           <p>Gender: ${this.state.gender}</p>
           <p>Strengths:</p>
-          <ul>${this.templates.listItems(this.state.strengths)}</ul>
+          ${this.templates.unorderedList(this.state.strengths, "strength-list")}
           <p>Weaknesses:</p>
           <ul>${this.templates.listItems(this.state.weaknesses)}</ul>
         </div>
       `;
     },
-    listItems: list => {
-      return list.reduce((sum, i) => sum + `<li>${i}</li>`,"");
+    unorderedList: (list, id) => `<ul id="${id}">${this.templates.listItems(list)}</ul>`,
+    listItems: (list, id) => list.reduce((sum, e, i) => sum + `<li id="${id}-${i}">${e}</li>`,""),
+    element: (e, text) => {
+      let element = this.new(e);
+      element.innerHTML = text;
+      return element;
+    },
+    ul: list => {
+      let ul = this.new("ul");
+      list.forEach((e, i) => ul.appendChild(this.templates.li(e)));
+      return ul;
+    },
+    li: item => {
+      let li = this.new("li");
+      li.innerHTML = item;
+      return li;
+    },
+    button: data => {
+      let button = this.new("button");
+      button.innerHTML = data.name;
+      button.addEventListener("click", () => data.method());
+      return button;
     }
   });
 
@@ -169,12 +208,12 @@ let data = {
   sound: "Hello", 
   type: "Human",
   strengths: [
-    "html",
-    "css",
-    "javascript"
+    "Hearing",
+    "Intelligence"
   ],
   weaknesses: [
-    "storyline"
+    "Memory",
+    "Sense of Smell"
   ]
 };
 
@@ -183,4 +222,5 @@ let me = dnd(data);
 console.log(me.set({name:"Rajon"}).get("name"));
 console.log(me.talkThenRun());
 me.reverseStrengthsWeaknesses();
-console.log(me.buildHTML());
+// me.buildHTML();
+me.sample();
